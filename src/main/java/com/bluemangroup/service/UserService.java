@@ -26,8 +26,6 @@ public class UserService {
     private RestTemplate restTemplate = new RestTemplate();
 
     public void createUser(User user){
-
-
         HttpHeaders headers2 = new HttpHeaders();
         headers2.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         headers2.set("Cookie", login());
@@ -47,7 +45,8 @@ public class UserService {
         System.out.println(response2);
     }
 
-    public String getUsers(){
+    public String getUsers() {
+
         HttpHeaders headers2 = new HttpHeaders();
         headers2.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         headers2.set("Cookie", login());
@@ -61,7 +60,6 @@ public class UserService {
                 "https://www.blueinktech.com/copilot/assets/php/db_calls.php", request2 , String.class);
         System.out.println(response2);
         return response2.getBody();
-
 
     }
 

@@ -1,0 +1,5 @@
+spring:
+  mail:
+    host: mail.unigroupinc.com
+    port: 25
+    test-connection: true
