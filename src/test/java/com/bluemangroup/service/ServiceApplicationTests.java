@@ -1,11 +1,15 @@
 package com.bluemangroup.service;
 
 import com.bluemangroup.model.User;
+import com.bluemangroup.model.Violations;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.io.IOException;
+import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -19,8 +23,14 @@ public class ServiceApplicationTests {
 	}
 
 	@Test
-	public void dotheshit(){
+	public void createUser(){
 		userService.createUser(new User());
+	}
+
+	@Test
+	public void getViolations() throws IOException {
+		Violations violations = userService.getViolations();
+		System.out.println(violations);
 	}
 
 }
