@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 
-@RestController("/users")
 @CrossOrigin
+@RestController("/users")
 public class UsersController {
 
     @Autowired
