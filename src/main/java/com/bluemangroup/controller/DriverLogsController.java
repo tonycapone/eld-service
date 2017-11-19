@@ -20,4 +20,5 @@ public class DriverLogsController {
     public void sendEmail(@RequestBody EmailRequestBody body) {
         driverLogsService.emailCsv(body);
     }
+
 }

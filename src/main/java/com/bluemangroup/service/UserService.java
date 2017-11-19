@@ -1,5 +1,6 @@
 package com.bluemangroup.service;
 
+import com.bluemangroup.model.Location;
 import com.bluemangroup.model.User;
 import com.bluemangroup.model.Violations;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -15,8 +16,11 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -33,16 +37,51 @@ public class UserService {
 
         map.add("call", "carrier_invite_user");
         map.add("carrier_row", "884702");
-        map.add("name_first", "dane2");
-        map.add("name_last", "therockjohson2");
-        map.add("user_role", "driver");
-        map.add("user_email", "dane_johnson2@unigroupinc.com");
+        map.add("name_first", user.getFirstName());
+        map.add("name_last", user.getLastName());
+        map.add("user_role", user.getRoles());
+        map.add("user_email", user.getEmail());
 
         HttpEntity<MultiValueMap<String, String>> request2 = new HttpEntity<>(map, headers2);
 
         ResponseEntity<String> response2 = restTemplate.postForEntity(
                 "https://www.blueinktech.com/copilot/assets/php/db_calls.php", request2 , String.class);
         System.out.println(response2);
+    }
+
+    public Location getDriverLocation(String driverId) throws IOException {
+        HttpHeaders headers2 = new HttpHeaders();
+        headers2.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        headers2.set("Cookie", login());
+        MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
+
+//        1. call:
+//        get_breadcrumb
+//        2. user_row:
+//        6042
+//        3. carrier_row:
+//        884702
+//        4. time_start:
+//        2017-11-11
+//        5. time_end:
+//        2017-11-19
+        map.add("call", "get_breadcrumb");
+        map.add("user_row", driverId);
+        map.add("carrier_row", "884702");
+        String date = LocalDateTime.now().plusDays(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+        map.add("time_start", "2017-11-17");
+        map.add("time_end", date);
+        HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(map, headers2);
+
+        ResponseEntity<String> response = restTemplate.postForEntity(
+                "https://www.blueinktech.com/copilot/assets/php/db_calls.php",
+                entity, String.class);
+        System.out.println(response);
+
+        List<Map<String, String>> locations = new ObjectMapper().readValue(response.getBody(), new TypeReference<List<Map<String, String>>> (){});
+
+        return new Location(locations.get(0).get("lat"), locations.get(0).get("lng"));
     }
 
     public String getUsers() {

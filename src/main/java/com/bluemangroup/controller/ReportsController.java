@@ -29,7 +29,6 @@ public class ReportsController {
                     driver.getFirstName(), driver.getLastName(), driver.getViolations()));
         });
 
-
         String body = String.format("Total Violations: %s \n \n %s", violations.getViolations(), list.toString() );
 
         emailService.sendEmail("Tony_Howell@unigroup.com", "HOS Violations", body);
