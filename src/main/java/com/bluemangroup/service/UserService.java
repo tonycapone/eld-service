@@ -74,10 +74,10 @@ public class UserService {
         map.add("call", "get_breadcrumb");
         map.add("user_row", driverId);
         map.add("carrier_row", "884702");
-        String date = LocalDateTime.now().plusDays(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-
-        map.add("time_start", "2017-11-17");
-        map.add("time_end", date);
+        String endDate = LocalDateTime.now().plusDays(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        String startDate = LocalDateTime.now().minusDays(3).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        map.add("time_start", startDate);
+        map.add("time_end", endDate);
         HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(map, headers2);
 
         ResponseEntity<String> response = restTemplate.postForEntity(
