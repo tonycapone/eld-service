@@ -9,7 +9,7 @@ public class EmailRequestBody {
 
     private String userRow;
     private String email;
-    private Date startTime;
-    private Date endTime;
+    private String startTime;
+    private String endTime;
 
 }

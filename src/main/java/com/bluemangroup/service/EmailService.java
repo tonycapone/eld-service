@@ -31,6 +31,7 @@ public class EmailService {
 
     public void sendEmail(List<String> to, String subject, String body) {
         to.forEach(receiver -> {
+
             SimpleMailMessage mailMessage = new SimpleMailMessage();
             mailMessage.setFrom("donotreply@unigroupinc.com");
             mailMessage.setTo(receiver);
