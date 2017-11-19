@@ -29,8 +29,22 @@ public class User {
     @JsonProperty("email_address")
     private String email;
 
+    @JsonProperty("cycle_violations")
+    private String cycleViolations;
+
     @JsonProperty("violations")
     private int violations;
+
+    @JsonProperty("max_drive_violations")
+    private int maxDriveViolations;
+
+    @JsonProperty("break_violations")
+    private int breakViolations;
+
+    @JsonProperty("max_duty_violations")
+    private int maxDutyViolations;
+
+
 
 //    "user_row":"5976",
 //            "name_first":"Mark",
