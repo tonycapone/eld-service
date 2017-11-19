@@ -28,7 +28,7 @@ public class ReportsController {
 
         StringBuilder list = new StringBuilder();
         violations.getViolators().forEach(driver -> {
-            list.append(String.format("\t - %s %s Violations: %s \n" +
+            list.append(String.format("\n\t - %s %s Violations: %s \n" +
                                       "\t\t * Break Violations: %s \n" +
                                       "\t\t * Max Drive Violations: %s \n" +
                                       "\t\t * Max Cycle Violations: %s \n " +
