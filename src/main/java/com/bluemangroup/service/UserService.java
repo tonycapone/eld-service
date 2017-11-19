@@ -3,6 +3,8 @@ package com.bluemangroup.service;
 import com.bluemangroup.model.Location;
 import com.bluemangroup.model.User;
 import com.bluemangroup.model.Violations;
+import com.bluemangroup.model.dao.VCOMDriver;
+import com.bluemangroup.repository.VCOMDriverRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
@@ -19,6 +21,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -28,6 +31,9 @@ import java.util.stream.Stream;
 public class UserService {
 
     private RestTemplate restTemplate = new RestTemplate();
+
+    @Autowired
+    VCOMDriverRepository driverRepository;
 
     public void createUser(User user){
         HttpHeaders headers2 = new HttpHeaders();
@@ -138,4 +144,20 @@ public class UserService {
         violations.setViolations(violators.stream().mapToInt(v -> v.getViolations()).sum());
         return violations;
     }
+
+    public void createDrivers() {
+        List<VCOMDriver> drivers = driverRepository.findAll();
+        drivers.stream().filter(d -> d.getEmailAddress().trim().length() > 0).limit(5).forEach(vcomDriver -> {
+            User user = User.builder()
+                .firstName(vcomDriver.getFirstName().trim())
+                .lastName(vcomDriver.getLastName().trim())
+                .email(vcomDriver.getEmailAddress().trim())
+                .roles("driver")
+                .build();
+            createUser(user);
+            System.out.println(user);
+        });
+        System.out.println(drivers.size());
+    }
+
 }

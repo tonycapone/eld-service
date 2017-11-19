@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 
 @CrossOrigin
-@RestController("/users")
+@RestController()
 public class UsersController {
 
     @Autowired
@@ -22,13 +22,19 @@ public class UsersController {
 
     }
 
-    @GetMapping
+    @GetMapping("/users")
     public String getUsers() {
         return userService.getUsers();
     }
 
-    @GetMapping("/violations")
+    @GetMapping("/users/violations")
     public Violations getViolations() throws IOException {
         return userService.getViolations();
     }
+
+    @PostMapping("/drivers/create")
+    public void createDrivers() {
+        userService.createDrivers();
+    }
+
 }

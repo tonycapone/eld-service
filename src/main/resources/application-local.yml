@@ -3,3 +3,14 @@ spring:
     host: mail.unigroupinc.com
     port: 25
     test-connection: true
+  datasource:
+    driver-class-name: com.ibm.db2.jcc.DB2Driver
+    url: jdbc:db2://ug04.unigroupinc.com:5026/DBT:currentSchema=UNITEST;
+    # add your credentials here
+    username: tajd1
+    password: Tyerew55
+  jackson.serialization.write-dates-as-timestamps: false
+  jpa:
+    hibernate.ddl-auto: none
+    show-sql: false
+    properties.hibernate.format_sql: false
