@@ -86,8 +86,12 @@ public class UserService {
         System.out.println(response);
 
         List<Map<String, String>> locations = new ObjectMapper().readValue(response.getBody(), new TypeReference<List<Map<String, String>>> (){});
-
-        return new Location(locations.get(0).get("lat"), locations.get(0).get("lng"));
+        Location location = new Location();
+        if(locations.size() > 0) {
+            location.setLatitude(locations.get(locations.size() - 1).get("lat"));
+            location.setLongitude(locations.get(locations.size() - 1).get("lng"));
+        }
+        return location;
     }
 
     public String getUsers() {
