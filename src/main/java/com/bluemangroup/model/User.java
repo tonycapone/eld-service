@@ -29,6 +29,9 @@ public class User {
     @JsonProperty("email_address")
     private String email;
 
+    @JsonProperty("cycle_violations")
+    private String cycleViolations;
+
     @JsonProperty("violations")
     private int violations;
 
@@ -37,6 +40,33 @@ public class User {
 
     @JsonProperty("vcomDriverId")
     private String vcomDriverId;
+
+    @JsonProperty("max_drive_violations")
+    private int maxDriveViolations;
+
+    @JsonProperty("break_violations")
+    private int breakViolations;
+
+    @JsonProperty("max_duty_violations")
+    private int maxDutyViolations;
+
+    @JsonProperty("drive_time")
+    private String driveTime;
+
+    @JsonProperty("shift_time")
+    private String shiftTime;
+
+    @JsonProperty("cycle_time")
+    private String cycleTime;
+
+    @JsonProperty("drive_hrs")
+    private String driveHours;
+
+    @JsonProperty("odnd_hrs")
+    private String odometerHours;
+
+    @JsonProperty("cycle_rule_hours")
+    private String cycleRuleHours;
 
 //    "user_row":"5976",
 //            "name_first":"Mark",

@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @RestController()
 public class ReportsController {
@@ -25,13 +27,20 @@ public class ReportsController {
 
         StringBuilder list = new StringBuilder();
         violations.getViolators().forEach(driver -> {
-            list.append(String.format("%s %s - Violations: %s \n",
-                    driver.getFirstName(), driver.getLastName(), driver.getViolations()));
+            list.append(String.format("\t - %s %s Violations: %s \n" +
+                                      "\t\t * Break Violations: %s \n" +
+                                      "\t\t * Max Drive Violations: %s \n" +
+                                      "\t\t * Max Cycle Violations: %s \n " +
+                                      "\t\t * Max Duty Violations: %s ",
+                    driver.getFirstName(), driver.getLastName(), driver.getViolations(),
+                    driver.getBreakViolations(), driver.getMaxDriveViolations(), driver.getCycleViolations(),
+                    driver.getMaxDutyViolations()));
         });
 
-        String body = String.format("Total Violations: %s \n \n %s", violations.getViolations(), list.toString() );
-
-        emailService.sendEmail("Tony_Howell@unigroup.com", "HOS Violations", body);
+        String body = String.format("Total Violations: %s \n \n" +
+                "----------------------- \n %s", violations.getViolations(), list.toString() );
+        String date = LocalDateTime.now().plusDays(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        emailService.sendEmail("Tony_Howell@unigroup.com", "HOS Violations for " + date, body);
 
     }
 }
