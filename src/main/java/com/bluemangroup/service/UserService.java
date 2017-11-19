@@ -156,6 +156,7 @@ public class UserService {
                 .firstName(vcomDriver.getFirstName().trim())
                 .lastName(vcomDriver.getLastName().trim())
                 .email(vcomDriver.getEmailAddress().trim())
+                .vcomDriverId(vcomDriver.getDriverId())
                 .roles("driver")
                 .build();
             createUser(user);

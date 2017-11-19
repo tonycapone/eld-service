@@ -7,23 +7,23 @@ import java.io.Serializable;
 
 @Data
 @Entity
-@Table(name = "DRIVERPINFO")
-public class VCOMDriver {
+@Table(name = "DRIVERSFTY")
+public class DriverSafety {
 
     @EmbeddedId
     private Id id;
 
-    @Column(name = "NAME_FRST")
-    private String firstName;
+    @Column(name = "DRVR_RATG")
+    private String driverRating;
 
-    @Column(name = "NAME_LAST")
-    private String lastName;
+    @Column(name = "DRVR_RATG_PREV")
+    private String prevDriverRating;
 
-    @Column(name = "EMAIL_ADDR_LINE")
-    private String emailAddress;
+    @Column(name = "SP_DRVR_RATG")
+    private String spDriverRating;
 
-    @Column(name = "KEY_COMB_DRVR")
-    private String driverId;
+    @Column(name = "SP_DRVR_RATG_PREV")
+    private String prevSpDriverRating;
 
     @Data
     @Builder
@@ -40,5 +40,4 @@ public class VCOMDriver {
         private String driverCompanyCode;
 
     }
-
 }
