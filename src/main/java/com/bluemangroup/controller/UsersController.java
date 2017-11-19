@@ -32,9 +32,4 @@ public class UsersController {
         return userService.getViolations();
     }
 
-    @PostMapping("/drivers/create")
-    public void createDrivers() {
-        userService.createDrivers();
-    }
-
 }

@@ -19,4 +19,9 @@ public class DriversController {
         return userService.getDriverLocation(driverId);
     }
 
+    @PostMapping("/drivers/create")
+    public void createDrivers() {
+        userService.createDrivers();
+    }
+
 }
