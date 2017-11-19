@@ -7,6 +7,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Properties;
 
 @Service
@@ -28,15 +29,19 @@ public class EmailService {
 
     }
 
-    public void sendEmail(String to, String subject, String body) {
+    public void sendEmail(List<String> to, String subject, String body) {
+        to.forEach(receiver -> {
+            SimpleMailMessage mailMessage = new SimpleMailMessage();
+            mailMessage.setFrom("donotreply@unigroupinc.com");
+            mailMessage.setTo(receiver);
+            mailMessage.setSubject(subject);
+            mailMessage.setText(body);
 
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setFrom("donotreply@unigroupinc.com");
-        mailMessage.setTo(to);
-        mailMessage.setSubject(subject);
-        mailMessage.setText(body);
+            javaMailSender.send(mailMessage);
+        });
 
-        javaMailSender.send(mailMessage);
+
+
 
     }
 

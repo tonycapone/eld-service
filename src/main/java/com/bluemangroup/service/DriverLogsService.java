@@ -43,7 +43,7 @@ public class DriverLogsService {
                String.class
         );
 
-        emailService.sendEmail(body.getEmail(), "Driver Log Files", response.getBody());
+        emailService.sendEmail(Collections.singletonList(body.getEmail()), "Driver Log Files", response.getBody());
         System.out.println(response);
     }
 

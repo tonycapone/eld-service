@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 
 @RestController()
 public class ReportsController {
@@ -40,7 +41,8 @@ public class ReportsController {
         String body = String.format("Total Violations: %s \n \n" +
                 "----------------------- \n %s", violations.getViolations(), list.toString() );
         String date = LocalDateTime.now().plusDays(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        emailService.sendEmail("Tony_Howell@unigroup.com", "HOS Violations for " + date, body);
+        emailService.sendEmail(Arrays.asList("Tony_Howell@unigroup.com", "tajd1@unigroupinc.com", "dane_johnson@unigroup.com"),
+                "HOS Violations for " + date, body);
 
     }
 }
