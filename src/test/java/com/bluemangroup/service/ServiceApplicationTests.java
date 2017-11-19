@@ -26,7 +26,7 @@ public class ServiceApplicationTests {
 	}
 
 	@Test
-	public void createUser(){
+	public void createUser() throws IOException {
 		userService.createUser(new User());
 	}
 

@@ -32,6 +32,9 @@ public class User {
     @JsonProperty("violations")
     private int violations;
 
+    @JsonProperty("cur_ids")
+    private String curIds;
+
     @JsonProperty("vcomDriverId")
     private String vcomDriverId;
 

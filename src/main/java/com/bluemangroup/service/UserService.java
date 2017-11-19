@@ -3,7 +3,9 @@ package com.bluemangroup.service;
 import com.bluemangroup.model.Location;
 import com.bluemangroup.model.User;
 import com.bluemangroup.model.Violations;
+import com.bluemangroup.model.dao.DriverSafety;
 import com.bluemangroup.model.dao.VCOMDriver;
+import com.bluemangroup.repository.DriverSafetyRepository;
 import com.bluemangroup.repository.VCOMDriverRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,12 +20,10 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.sql.Driver;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -32,10 +32,16 @@ public class UserService {
 
     private RestTemplate restTemplate = new RestTemplate();
 
+    private Map<String, DriverSafety.Id> driverIdToSafetyId = new HashMap<>();
+    private Map<String, String> driverCurIdToDriverId = new HashMap<>();
+
     @Autowired
     VCOMDriverRepository driverRepository;
 
-    public void createUser(User user){
+    @Autowired
+    DriverSafetyRepository driverSafetyRepository;
+
+    public String createUser(User user) throws IOException {
         HttpHeaders headers2 = new HttpHeaders();
         headers2.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         headers2.set("Cookie", login());
@@ -53,6 +59,9 @@ public class UserService {
         ResponseEntity<String> response2 = restTemplate.postForEntity(
                 "https://www.blueinktech.com/copilot/assets/php/db_calls.php", request2 , String.class);
         System.out.println(response2);
+        Map<String, String> resp = new ObjectMapper().readValue(response2.getBody(), new TypeReference<Map<String, String>>() {
+        });
+        return resp.get("id");
     }
 
     public Location getDriverLocation(String driverId) throws IOException {
@@ -94,7 +103,7 @@ public class UserService {
         return location;
     }
 
-    public String getUsers() {
+    public List<User> getUsers() throws IOException {
 
         HttpHeaders headers2 = new HttpHeaders();
         headers2.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -107,8 +116,14 @@ public class UserService {
 
         ResponseEntity<String> response2 = restTemplate.postForEntity(
                 "https://www.blueinktech.com/copilot/assets/php/db_calls.php", request2 , String.class);
+
+        List<User> users = new ObjectMapper().readValue(response2.getBody(), new TypeReference<List<User>>() {});
+        users.forEach(user -> {
+            user.setVcomDriverId(driverCurIdToDriverId.get(user.getCurIds()));
+        });
+
         System.out.println(response2);
-        return response2.getBody();
+        return users;
 
     }
 
@@ -149,20 +164,38 @@ public class UserService {
         return violations;
     }
 
-    public void createDrivers() {
+    public void createDrivers() throws IOException {
         List<VCOMDriver> drivers = driverRepository.findAll();
-        drivers.stream().filter(d -> d.getEmailAddress().trim().length() > 0).limit(5).forEach(vcomDriver -> {
+        drivers.stream().filter(d -> d.getEmailAddress().trim().length() > 0).limit(1).forEach(vcomDriver -> {
             User user = User.builder()
                 .firstName(vcomDriver.getFirstName().trim())
                 .lastName(vcomDriver.getLastName().trim())
                 .email(vcomDriver.getEmailAddress().trim())
-                .vcomDriverId(vcomDriver.getDriverId())
+                .vcomDriverId(vcomDriver.getDriverId().trim())
                 .roles("driver")
                 .build();
-            createUser(user);
+            String curIds = null;
+            try {
+                curIds = createUser(user);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            DriverSafety.Id driverSafetyId = DriverSafety.Id.builder()
+                .driverCompanyCode(vcomDriver.getId().getDriverCompanyCode())
+                .driverIdentity(vcomDriver.getId().getDriverIdentity())
+                .build();
+
+            driverIdToSafetyId.put(vcomDriver.getDriverId().trim(), driverSafetyId);
+            driverCurIdToDriverId.put(curIds, vcomDriver.getDriverId().trim());
+
             System.out.println(user);
         });
         System.out.println(drivers.size());
+    }
+
+    public DriverSafety getDriverRating(String driverId) {
+        return driverSafetyRepository.findFirstById(driverIdToSafetyId.get(driverId));
     }
 
 }

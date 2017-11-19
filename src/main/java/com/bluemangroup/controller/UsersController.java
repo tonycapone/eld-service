@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 @CrossOrigin
 @RestController()
@@ -17,13 +18,12 @@ public class UsersController {
     private UserService userService;
 
     @PostMapping
-    public void createUser(@RequestBody User user) {
+    public void createUser(@RequestBody User user) throws IOException {
         userService.createUser(user);
-
     }
 
     @GetMapping("/users")
-    public String getUsers() {
+    public List<User> getUsers() throws IOException {
         return userService.getUsers();
     }
 
